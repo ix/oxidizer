@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+EXE=${PWD##*/}
+DIR=~/.cargo/bin/$EXE
+echo "Assuming executable path is '$DIR'..."
+if [ -f $DIR ]
+then
+    echo "File found... deleting and reinstalling."
+    cargo uninstall $EXE && cargo install
+    echo "Reinstalled."
+else
+    echo "File was not found. Installing."
+    cargo install
+    echo "Installed."
+fi
