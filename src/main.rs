@@ -10,6 +10,8 @@ use corruption::*;
 fn main() {
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
+    let mut corrupt = Corroptions::new();
+    
     let mut options = Options::new();
     
     options.optflag("h", "help", "print this help menu");
@@ -39,8 +41,8 @@ fn main() {
             return;
         }
     };
-
-    match file.mutate_to("mutated.bin") {
+    
+    match file.mutate_to("mutated.bin", &corrupt) {
         Ok(_) => println!("Successfully corrupted the file."),
         Err(_) => println!("Failed to corrupt the file!")
     }
