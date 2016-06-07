@@ -1,8 +1,9 @@
 [package]
 name = "oxidizer"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Lain <lain@lain.org.uk>"]
 
 [dependencies]
 rand = "0.3.14"
 getopts = "0.2.14"
+rustc-serialize = "0.3.19"
