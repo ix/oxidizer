@@ -11,6 +11,7 @@ use corruption::*;
 fn main() {
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
+    let output;
     let mut corrupt = Corroptions::new();    
     let mut options = Options::new();
     
@@ -24,6 +25,7 @@ fn main() {
     options.optopt("s", "skip", "corrupt every n bytes", "N");
     options.optopt("b", "begin", "offset to begin at", "OFFSET");
     options.optopt("e", "end", "offset to end at", "OFFSET");
+    options.optopt("o", "output", "output filename", "FILE");
     
     let matches = match options.parse(&args[1..]) {
         Ok(m) => m,
@@ -38,10 +40,18 @@ fn main() {
     }
 
     if matches.opt_str("f").is_none() {
-        println!("Input or output filename is missing!");
+        println!("Input filename is missing!");
         return;
     }
 
+    match matches.opt_str("o") {
+        Some(filename) => output = filename,
+        None => {
+            println!("Output filename is missing - defaulting to 'mutated.bin'!");
+            output = String::from("mutated.bin")
+        }
+    }
+    
     if let Some(inc) = matches.opt_str("i") {
         corrupt.action = CorruptMethod::Increment(inc.parse::<u8>().unwrap());
     }
@@ -83,7 +93,7 @@ fn main() {
         }
     };
     
-    match file.mutate_to("mutated.bin", &corrupt) {
+    match file.mutate_to(output, &corrupt) {
         Ok(_) => println!("Successfully corrupted the file."),
         Err(_) => println!("Failed to corrupt the file!")
     }
